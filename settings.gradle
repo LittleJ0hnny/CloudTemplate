@@ -1,0 +1,4 @@
+rootProject.name = 'CloudTemplate'
+include 'config-service'
+include 'discovery-service'
+

@@ -1,0 +1,12 @@
+group 'com.littlejohnny'
+version '1.0-SNAPSHOT'
+
+bootJar {
+    mainClassName = "com.littlejohnny.discovery.DiscoveryServiceStarter"
+}
+
+dependencies {
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-server")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
+}

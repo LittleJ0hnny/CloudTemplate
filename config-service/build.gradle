@@ -1,0 +1,12 @@
+group 'com.okravtsiv'
+version '1.0-SNAPSHOT'
+
+bootJar {
+    mainClassName = "com.littlejohnny.configserver.ConfigServiceStarter"
+}
+
+dependencies {
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.cloud:spring-cloud-config-server")
+}

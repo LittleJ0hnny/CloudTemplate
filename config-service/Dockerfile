@@ -1,0 +1,14 @@
+FROM openjdk:8u181-jdk
+
+MAINTAINER Ostap Kravtsiv
+
+EXPOSE 8888
+
+ARG ARTIFACT=${jarName:-config}-${jarVersion:-1.0-SNAPSHOT}.jar
+
+ADD build/libs/$ARTIFACT $ARTIFACT
+
+ENV JAVA_OPTS=""
+ENV ARTIFACT_FILE=$ARTIFACT
+
+ENTRYPOINT java $JAVA_OPTS -jar "$ARTIFACT_FILE"

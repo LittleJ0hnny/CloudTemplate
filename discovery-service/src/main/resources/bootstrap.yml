@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    config:
+      name: discovery-service
+      username: configUser
+      password: configPassword
