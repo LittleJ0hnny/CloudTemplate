@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    config:
+      name: gateway
+      discovery:
+        service-id: configservice
+        enabled: true
+      username: configUser
+      password: configPassword
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discUser:discPassword@${DISCOVERY_HOST:localhost}:${DISCOVERY_PORT:8761}/eureka/

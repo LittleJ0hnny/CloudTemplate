@@ -1,4 +1,4 @@
-group 'com.littlejohnny'
+group 'com.okravtsiv'
 version '1.0-SNAPSHOT'
 
 bootJar {
