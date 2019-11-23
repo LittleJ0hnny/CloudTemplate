@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    config:
+      name: auth-service
+      discovery:
+        service-id: configservice
+        enabled: true
+      username: configUser
+      password: configPassword
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discUser:discPassword@${DISCOVERY_HOST:localhost}:${DISCOVERY_PORT:8761}/eureka/
+
+jwt:
+  certificate:
+    store:
+      file: classpath:/certificate/keystore.jks
+      password: password
+    key:
+      alias: keystore
+      password: password
+
+security:
+  oauth2:
+    resource:
+      filter-order: 3

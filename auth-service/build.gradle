@@ -1,0 +1,52 @@
+group 'com.okravtsiv'
+version '1.0-SNAPSHOT'
+
+configurations {
+    liquibase
+}
+
+bootJar {
+    mainClassName = "com.okravtsiv.authservice.AuthServiceStarter"
+}
+
+dependencies {
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.cloud:spring-cloud-starter-oauth2")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("mysql:mysql-connector-java:${mysql_connector_version}")
+    implementation("org.liquibase:liquibase-core:${liquibase_version}")
+    implementation("org.javassist:javassist:${javassist_version}")
+
+    liquibase ("org.liquibase:liquibase-core:${liquibase_version}")
+    liquibase ("mysql:mysql-connector-java:${mysql_connector_version}")
+}
+
+task generateBackup(type: JavaExec) {
+    group = "Liquibase"
+    classpath configurations.liquibase
+    main = "liquibase.integration.commandline.Main"
+    args "--changeLogFile=src/main/resources/db/changelog/db.changelog-master.xml"
+    args "--username=admin"
+    args "--password=admin"
+    args "--url=jdbc:mysql://localhost:3306/cred_db?serverTimezone=UTC"
+    args "--logLevel=debug"
+    args "--driver=com.mysql.jdbc.Driver"
+    args "--diffTypes=\"tables\", \"columns\", \"views\", \"primaryKeys\", \"indexes\", \"foreignKeys\", \"sequences\", \"data\""
+    args "generateChangeLog"
+}
+
+task updateDb(type: JavaExec) {
+    group = "Liquibase"
+    classpath configurations.liquibase
+    main = "liquibase.integration.commandline.Main"
+    args "--changeLogFile=src/main/resources/db/changelog/db.changelog-master.xml"
+    args "--username=admin"
+    args "--password=admin"
+    args "--url=jdbc:mysql://localhost:3306/cred_db?createDatabaseIfNotExist=true&serverTimezone=UTC"
+    args "--driver=com.mysql.jdbc.Driver"
+    args "--logLevel=debug"
+    args "--defaultSchemaName=cred_db"
+    args "update"
+}
