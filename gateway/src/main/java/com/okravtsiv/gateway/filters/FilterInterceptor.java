@@ -1,8 +1,14 @@
 package com.okravtsiv.gateway.filters;
 
 import com.netflix.zuul.ZuulFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FilterInterceptor extends ZuulFilter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(FilterInterceptor.class);
 
     @Override
     public String filterType() {
@@ -20,7 +26,5 @@ public class FilterInterceptor extends ZuulFilter {
     }
 
     @Override
-    public Object run() {
-        return null;
-    }
+    public Object run() { return null; }
 }

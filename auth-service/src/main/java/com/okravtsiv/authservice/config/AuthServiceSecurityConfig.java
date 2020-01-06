@@ -21,7 +21,7 @@ import java.security.KeyPair;
 @Order(6)
 @Configuration
 @EnableAuthorizationServer
-public class AuthServiceConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthServiceSecurityConfig extends AuthorizationServerConfigurerAdapter {
     @Value("${jwt.certificate.store.file}")
     private Resource keystore;
 

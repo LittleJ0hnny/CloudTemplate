@@ -4,6 +4,8 @@ import com.okravtsiv.authservice.domain.model.dto.OAuth2ClientDTO;
 import com.okravtsiv.authservice.domain.model.entity.OAuth2Client;
 import com.okravtsiv.authservice.domain.model.mappers.OAuth2ClientMapper;
 import com.okravtsiv.authservice.domain.service.OAuth2ClientService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/oauth2clients")
 public class OAuth2ClientController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OAuth2ClientController.class);
 
     @Autowired
     private OAuth2ClientService oAuth2ClientService;
@@ -24,6 +28,7 @@ public class OAuth2ClientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<OAuth2ClientDTO> getClient(@PathVariable Long id) {
+        LOG.info("Trying to get oAuth2Client with id " + id);
         return ResponseEntity.ok(OAuth2ClientMapper.INSTANCE.entityToDto(oAuth2ClientService.getOne(id)));
     }
 
