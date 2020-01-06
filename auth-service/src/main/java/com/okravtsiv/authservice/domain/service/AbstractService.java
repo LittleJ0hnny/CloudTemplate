@@ -21,6 +21,12 @@ public abstract class AbstractService<T, ID, R extends JpaRepository<T, ID>> imp
 
     @Override
     @Transactional
+    public void deleteById(ID id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
     public void save(T entity) {
         repository.save(entity);
     }

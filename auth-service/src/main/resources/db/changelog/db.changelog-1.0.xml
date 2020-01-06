@@ -1,20 +1,41 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
-    <changeSet author="Ostap (generated)" id="1565714608178-1">
-        <createTable tableName="hibernate_sequence">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.7.xsd">
+    <changeSet author="20lit (generated)" id="1578275398751-1">
+        <createTable tableName="auth_grant_types">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-2">
+        <createTable tableName="auth_grant_types_sequence">
             <column name="next_val" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="Ostap (generated)" id="1565714608178-2">
+    <changeSet author="20lit (generated)" id="1578275398751-3">
+        <createTable tableName="authorities">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="authority" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-4">
+        <createTable tableName="authorities_sequence">
+            <column name="next_val" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-5">
         <createTable tableName="oauth2_clients">
-            <column autoIncrement="true" name="id" type="BIGINT">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
             <column name="access_token_validity_seconds" type="INT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="authorities" type="VARCHAR(255)"/>
-            <column name="authorized_grant_types" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="client_id" type="VARCHAR(255)">
@@ -29,27 +50,122 @@
             <column name="refresh_token_validity_seconds" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="resource_ids" type="VARCHAR(255)">
-                <constraints unique="true"/>
-            </column>
-            <column name="scope" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Ostap (generated)" id="1565714608178-3">
-        <createTable tableName="oauth2client_registered_redirect_uri">
+    <changeSet author="20lit (generated)" id="1578275398751-6">
+        <createTable tableName="oauth2_clients_sequence">
+            <column name="next_val" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-7">
+        <createTable tableName="oauth2client_auth_grant_types">
             <column name="oauth2client_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="registered_redirect_uri" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="Ostap (generated)" id="1565714608178-4">
-        <createTable tableName="users">
-            <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="authorities" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+            <column name="auth_grant_type_id" type="BIGINT">
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-8">
+        <createTable tableName="oauth2client_authorities">
+            <column name="oauth2client_id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="authority_id" type="BIGINT">
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-9">
+        <createTable tableName="oauth2client_redirect_uris">
+            <column name="oauth2client_id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="uri_id" type="BIGINT">
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-10">
+        <createTable tableName="oauth2client_resources">
+            <column name="oauth2client_id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="resource_id" type="BIGINT">
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-11">
+        <createTable tableName="oauth2client_scopes">
+            <column name="oauth2client_id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="scope_id" type="BIGINT">
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-12">
+        <createTable tableName="redirect_uris">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-13">
+        <createTable tableName="redirect_uris_sequence">
+            <column name="next_val" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-14">
+        <createTable tableName="resources">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-15">
+        <createTable tableName="resources_sequence">
+            <column name="next_val" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-16">
+        <createTable tableName="scopes">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-17">
+        <createTable tableName="scopes_sequence">
+            <column name="next_val" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-18">
+        <createTable tableName="user_authorities">
+            <column name="user_id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="authority_id" type="BIGINT">
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-19">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
             </column>
             <column name="is_credentials_expired" type="BIT(1)">
                 <constraints nullable="false"/>
@@ -71,12 +187,9 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="Ostap (generated)" id="1565714608178-5">
-        <createIndex indexName="FK83scp6w75b44yd6bdnpl8bx2v" tableName="oauth2client_registered_redirect_uri">
-            <column name="oauth2client_id"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="Ostap (generated)" id="1565714608178-6">
-        <addForeignKeyConstraint baseColumnNames="oauth2client_id" baseTableName="oauth2client_registered_redirect_uri" constraintName="FK83scp6w75b44yd6bdnpl8bx2v" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="oauth2_clients" validate="true"/>
+    <changeSet author="20lit (generated)" id="1578275398751-20">
+        <createTable tableName="users_sequence">
+            <column name="next_val" type="BIGINT"/>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

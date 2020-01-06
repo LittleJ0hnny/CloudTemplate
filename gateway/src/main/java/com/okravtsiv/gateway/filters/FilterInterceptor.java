@@ -1,9 +1,6 @@
 package com.okravtsiv.gateway.filters;
 
 import com.netflix.zuul.ZuulFilter;
-import com.netflix.zuul.context.RequestContext;
-
-import javax.servlet.http.HttpServletRequest;
 
 public class FilterInterceptor extends ZuulFilter {
 

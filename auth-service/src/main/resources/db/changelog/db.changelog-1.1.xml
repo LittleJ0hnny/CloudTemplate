@@ -1,39 +1,113 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
-    <changeSet author="Ostap (generated)" id="1565714608178-7">
-        <insert tableName="hibernate_sequence">
-            <column name="next_val" valueNumeric="1"/>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.7.xsd">
+    <changeSet author="20lit (generated)" id="1578275398751-21">
+        <insert tableName="auth_grant_types">
+            <column name="id" valueNumeric="1"/>
+            <column name="value" value="refresh_token"/>
         </insert>
-        <insert tableName="hibernate_sequence">
-            <column name="next_val" valueNumeric="1"/>
+        <insert tableName="auth_grant_types">
+            <column name="id" valueNumeric="2"/>
+            <column name="value" value="password"/>
         </insert>
     </changeSet>
-    <changeSet author="Ostap (generated)" id="1565714608178-8">
+    <changeSet author="20lit (generated)" id="1578275398751-22">
+        <insert tableName="auth_grant_types_sequence">
+            <column name="next_val" valueNumeric="3"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-23">
+        <insert tableName="authorities">
+            <column name="id" valueNumeric="1"/>
+            <column name="authority" value="superuser"/>
+        </insert>
+        <insert tableName="authorities">
+            <column name="id" valueNumeric="2"/>
+            <column name="authority" value="admin"/>
+        </insert>
+        <insert tableName="authorities">
+            <column name="id" valueNumeric="3"/>
+            <column name="authority" value="user"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-24">
+        <insert tableName="authorities_sequence">
+            <column name="next_val" valueNumeric="4"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-25">
         <insert tableName="oauth2_clients">
             <column name="id" valueNumeric="1"/>
             <column name="access_token_validity_seconds" valueNumeric="1800"/>
-            <column name="authorities" value="[]"/>
-            <column name="authorized_grant_types" value="[refresh_token, password]"/>
-            <column name="client_id" value="rootClient"/>
-            <column name="client_secret" value="{bcrypt}$2a$10$GwPNxD8iVKG0DxdobwjnseitA2eyxPUR5JqRLXhh7PsvhkHatvdq2"/>
+            <column name="client_id" value="rootClientID"/>
+            <column name="client_secret" value="{bcrypt}$2a$10$2hadDqm3tb7WwXBvAHFrguVE6D9MKWz8AIeeiLarOm7euBD5p1Gu6"/>
             <column name="is_auto_approve" valueBoolean="true"/>
             <column name="is_scoped" valueBoolean="false"/>
-            <column name="is_secret_required" valueBoolean="false"/>
+            <column name="is_secret_required" valueBoolean="true"/>
             <column name="refresh_token_validity_seconds" valueNumeric="86400"/>
-            <column name="resource_ids" value="[]"/>
-            <column name="scope" value="[myscope]"/>
         </insert>
     </changeSet>
-    <changeSet author="Ostap (generated)" id="1565714608178-9">
+    <changeSet author="20lit (generated)" id="1578275398751-26">
+        <insert tableName="oauth2_clients_sequence">
+            <column name="next_val" valueNumeric="2"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-27">
+        <insert tableName="oauth2client_auth_grant_types">
+            <column name="oauth2client_id" valueNumeric="1"/>
+            <column name="auth_grant_type_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="oauth2client_auth_grant_types">
+            <column name="oauth2client_id" valueNumeric="1"/>
+            <column name="auth_grant_type_id" valueNumeric="2"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-28">
+        <insert tableName="oauth2client_scopes">
+            <column name="oauth2client_id" valueNumeric="1"/>
+            <column name="scope_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-29">
+        <insert tableName="redirect_uris_sequence">
+            <column name="next_val" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-30">
+        <insert tableName="resources_sequence">
+            <column name="next_val" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-31">
+        <insert tableName="scopes">
+            <column name="id" valueNumeric="1"/>
+            <column name="value" value="application"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-32">
+        <insert tableName="scopes_sequence">
+            <column name="next_val" valueNumeric="2"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-33">
+        <insert tableName="user_authorities">
+            <column name="user_id" valueNumeric="1"/>
+            <column name="authority_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-34">
         <insert tableName="users">
             <column name="id" valueNumeric="1"/>
-            <column name="authorities" value="[USER]"/>
             <column name="is_credentials_expired" valueBoolean="false"/>
             <column name="is_enabled" valueBoolean="true"/>
             <column name="is_expired" valueBoolean="false"/>
             <column name="is_locked" valueBoolean="false"/>
-            <column name="password" value="{bcrypt}$2a$10$T51gQFphoUaXtIKStVZRf.Gd0xe8IP67Qno6W2Hgw.bJf1kusg0Jm"/>
-            <column name="username" value="rootUser"/>
+            <column name="password" value="{bcrypt}$2a$10$3K1mHi59CAxHaW7fgGlz.e24eOGX6NotUDVlHCT3/2wYhWuAd5Ci2"/>
+            <column name="username" value="rootClientRootUser"/>
+        </insert>
+    </changeSet>
+    <changeSet author="20lit (generated)" id="1578275398751-35">
+        <insert tableName="users_sequence">
+            <column name="next_val" valueNumeric="2"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

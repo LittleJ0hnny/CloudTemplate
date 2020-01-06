@@ -1,22 +1,19 @@
 package com.okravtsiv.authservice.domain.model.entity;
 
-import com.okravtsiv.authservice.domain.model.Authorities;
-import com.okravtsiv.authservice.util.CollectionMapper;
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 @Entity
 @Table(name = "users")
+@SequenceGenerator(name = "user_id_generator", sequenceName = "users_sequence", allocationSize = 1)
 public class User implements UserDetails {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "user_id_generator")
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -25,8 +22,19 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String authorities;
+    @OneToMany
+    @JoinTable(
+            name = "user_authorities",
+            joinColumns = @JoinColumn(
+                    name = "user_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "authority_id",
+                    referencedColumnName = "id"
+            )
+    )
+    private Set<Authority> authorities;
 
     @Column(nullable = false)
     private boolean isExpired;
@@ -44,20 +52,11 @@ public class User implements UserDetails {
         this.isEnabled = true;
     }
 
-    public User(String username, String password, String authorities) {
-        this();
+    public User(String username, String password, Set<Authority> authorities) {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return CollectionMapper.stringToSet(authorities).stream().map(element -> (GrantedAuthority) () -> element).collect(Collectors.toSet());
-    }
-
-    public void setAuthorities(Set<Authorities> authorities) {
-        this.authorities = CollectionMapper.collectionToString(authorities.stream().map(Authorities::getValue).collect(Collectors.toSet()));
+        this.isEnabled = true;
     }
 
     @Override

@@ -1,25 +1,25 @@
 package com.okravtsiv.authservice.domain.model.dto;
 
-import com.okravtsiv.authservice.domain.model.UserBuilder;
-import com.okravtsiv.authservice.domain.model.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 public class UserDTO {
+    private Long id;
     private String username;
     private String password;
+    private Set<String> authorities;
+    private Boolean isExpired;
+    private Boolean isLocked;
+    private Boolean isCredentialsExpired;
+    private Boolean isEnabled;
 
-    public UserDTO(User user) {
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-    }
-
-    public User asUser() {
-        return new UserBuilder()
-                .setUsername(username)
-                .setPassword(password)
-                .build();
+    public UserDTO(String username, String password, Set<String> authorities) {
+        this.username = username;
+        this.password = password;
+        this.authorities = authorities;
     }
 }

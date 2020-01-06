@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface Service<T, ID, R extends JpaRepository<T, ID>> {
     void delete(T entity);
 
+    void deleteById(ID id);
+
     void save(T entity);
 
     List<T> findAll();

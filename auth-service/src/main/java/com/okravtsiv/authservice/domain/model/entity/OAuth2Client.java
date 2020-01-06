@@ -1,23 +1,22 @@
 package com.okravtsiv.authservice.domain.model.entity;
 
-import com.okravtsiv.authservice.domain.model.AuthGrantTypes;
-import com.okravtsiv.authservice.domain.model.Authorities;
-import com.okravtsiv.authservice.domain.model.Resources;
-import com.okravtsiv.authservice.domain.model.Scopes;
-import com.okravtsiv.authservice.util.CollectionMapper;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
 import javax.persistence.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
 @Entity
 @Table(name = "oauth2_clients")
-public class OAuth2Client implements ClientDetails {
+@SequenceGenerator(name = "oauth2client_id_generator", sequenceName = "oauth2_clients_sequence", allocationSize = 1)
+public class OAuth2Client implements ClientDetails, Serializable {
+
     @Transient
     @Value("token.access.default_time")
     public final Integer DEFAULT_ACCESS_TOKEN_VALIDITY = 1800;
@@ -27,7 +26,7 @@ public class OAuth2Client implements ClientDetails {
     public final Integer DEFAULT_REFRESH_TOKEN_VALIDITY = 86400;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "oauth2client_id_generator")
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -36,26 +35,84 @@ public class OAuth2Client implements ClientDetails {
     @Column(unique = true, nullable = false)
     private String clientSecret;
 
-    @Column(unique = true)
-    private String resourceIds;
+    @OneToMany
+    @JoinTable(
+            name = "oauth2client_resources",
+            joinColumns = @JoinColumn(
+                    name = "oauth2client_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "resource_id",
+                    referencedColumnName = "id"
+            )
+    )
+    private Set<Resource> resourceIds;
+
+    @OneToMany
+    @JoinTable(
+            name = "oauth2client_scopes",
+            joinColumns = @JoinColumn(
+                    name = "oauth2client_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "scope_id",
+                    referencedColumnName = "id"
+            )
+    )
+    private Set<Scope> scopes;
+
+    @OneToMany
+    @JoinTable(
+            name = "oauth2client_auth_grant_types",
+            joinColumns = @JoinColumn(
+                    name = "oauth2client_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "auth_grant_type_id",
+                    referencedColumnName = "id"
+            )
+    )
+    private Set<AuthGrantType> authorizedGrantTypes;
+
+    @OneToMany
+    @JoinTable(
+            name = "oauth2client_redirect_uris",
+            joinColumns = @JoinColumn(
+                    name = "oauth2client_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "uri_id",
+                    referencedColumnName = "id"
+            )
+    )
+    private Set<RedirectUri> registeredRedirectUri;
+
+    @OneToMany
+    @JoinTable(
+            name = "oauth2client_authorities",
+            joinColumns = @JoinColumn(
+                    name = "oauth2client_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "authority_id",
+                    referencedColumnName = "id"
+            )
+    )
+    private Set<Authority> authorities;
 
     @Column
-    private boolean isSecretRequired;
+    private Boolean isSecretRequired;
 
     @Column
-    private boolean isScoped;
+    private Boolean isScoped;
 
     @Column
-    private String scope;
-
-    @Column(nullable = false)
-    private String authorizedGrantTypes;
-
-    @ElementCollection
-    private Set<String> registeredRedirectUri;
-
-    @Column
-    private String authorities;
+    private Boolean isAutoApprove;
 
     @Column(nullable = false)
     private Integer accessTokenValiditySeconds;
@@ -63,16 +120,13 @@ public class OAuth2Client implements ClientDetails {
     @Column(nullable = false)
     private Integer refreshTokenValiditySeconds;
 
-    @Column
-    private boolean isAutoApprove;
-
     public OAuth2Client() {
         this.accessTokenValiditySeconds = DEFAULT_ACCESS_TOKEN_VALIDITY;
         this.refreshTokenValiditySeconds = DEFAULT_REFRESH_TOKEN_VALIDITY;
         this.isAutoApprove = true;
     }
 
-    public OAuth2Client(String clientId, String clientSecret, String authorizedGrantTypes) {
+    public OAuth2Client(String clientId, String clientSecret, Set<AuthGrantType> authorizedGrantTypes) {
         this();
         this.clientId = clientId;
         this.clientSecret = clientSecret;
@@ -80,48 +134,47 @@ public class OAuth2Client implements ClientDetails {
     }
 
     @Override
-    public Set<String> getResourceIds() {
-        return CollectionMapper.stringToSet(resourceIds);
-    }
-
-    @Override
-    public Set<String> getScope() {
-        return CollectionMapper.stringToSet(scope);
-    }
-
-    public void setScope(Set<Scopes> scopes) {
-        this.scope = CollectionMapper.collectionToString(scopes.stream().map(Scopes::getValue).collect(Collectors.toSet()));
-    }
-
-    public void setResourceIds(Set<Resources> resources) {
-        this.resourceIds = CollectionMapper.collectionToString(resources.stream().map(Resources::getValue).collect(Collectors.toSet()));
+    public Collection getAuthorities() {
+        return authorities;
     }
 
     @Override
     public Set<String> getAuthorizedGrantTypes() {
-        return CollectionMapper.stringToSet(authorizedGrantTypes);
-    }
-
-    public void setAuthorizedGrantTypes(Set<AuthGrantTypes> authGrantTypes) {
-        this.authorizedGrantTypes = CollectionMapper.collectionToString(authGrantTypes.stream().map(AuthGrantTypes::getValue).collect(Collectors.toSet()));
+        return this.authorizedGrantTypes.stream().map(AuthGrantType::getValue).collect(Collectors.toSet());
     }
 
     @Override
-    public Collection<GrantedAuthority> getAuthorities() {
-        return CollectionMapper.stringToSet(authorities).stream().map(element -> (GrantedAuthority) () -> element).collect(Collectors.toSet());
+    public Set<String> getRegisteredRedirectUri() {
+        return this.registeredRedirectUri.stream().map(RedirectUri::getValue).collect(Collectors.toSet());
     }
 
-    public void setAuthorities(List<Authorities> authorities) {
-        this.authorities = CollectionMapper.collectionToString(authorities.stream().map(Authorities::getValue).collect(Collectors.toSet()));
+    @Override
+    public Set<String> getResourceIds() {
+        return this.resourceIds.stream().map(Resource::getValue).collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean isSecretRequired() {
+        return this.isSecretRequired;
+    }
+
+    @Override
+    public boolean isScoped() {
+        return this.isScoped;
+    }
+
+    @Override
+    public Set<String> getScope() {
+        return scopes.stream().map(Scope::getValue).collect(Collectors.toSet());
     }
 
     @Override
     public boolean isAutoApprove(String scope) {
-        return isAutoApprove;
+        return this.isAutoApprove;
     }
 
     @Override
     public Map<String, Object> getAdditionalInformation() {
-        return new HashMap<>();
+        return null;
     }
 }
