@@ -2,7 +2,7 @@ group 'com.okravtsiv'
 version '1.0-SNAPSHOT'
 
 bootJar {
-    mainClassName = "com.littlejohnny.discovery.DiscoveryServiceStarter"
+    mainClassName = "com.okravtsiv.discovery.DiscoveryServiceStarter"
 }
 
 dependencies {

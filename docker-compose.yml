@@ -1,0 +1,64 @@
+version: '3.7'
+
+services:
+  config-service:
+    container_name: config-service
+    build:
+      context: ./config-service
+      dockerfile: Dockerfile
+      args:
+        jarName: config-service
+        jarVersion: 1.0-SNAPSHOT
+        bootstrapFile: bootstrap.sh
+    image: config-service:latest
+    environment:
+      - APP_NAME=config-service
+      - DISCOVERY_HOST=discovery-service
+      - DISCOVERY_PORT=8761
+      - DISCOVERY_USERNAME=discUser
+      - DISCOVERY_PASSWORD=discPassword
+      - CONFIG_PORT=8888
+      - CONFIG_USERNAME=configUser
+      - CONFIG_PASSWORD=configPassword
+    expose:
+      - 8888
+    networks:
+      - custom_bridge
+    tty:
+      true
+
+  discovery-service:
+    container_name: discovery-service
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile
+      args:
+        jarName: discovery-service
+        jarVersion: 1.0-SNAPSHOT
+        bootstrapFile: bootstrap.sh
+    image: discovery-service:latest
+    environment:
+      - APP_NAME=discovery-service
+      - CONFIG_APP_NAME=config-service
+      - CONFIG_FILE_NAME=discovery-service
+      - CONFIG_HOST=config-service
+      - CONFIG_PORT=8888
+      - CONFIG_USERNAME=configUser
+      - CONFIG_PASSWORD=configPassword
+      - DISCOVERY_HOST=discovery-service
+      - DISCOVERY_PORT=8761
+      - DISCOVERY_USERNAME=discUser
+      - DISCOVERY_PASSWORD=discPassword
+    expose:
+      - 8761
+    networks:
+      - custom_bridge
+    tty:
+      true
+    depends_on:
+      - config-service
+
+networks:
+  custom_bridge:
+    name: custom_bridge
+    driver: bridge

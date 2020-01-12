@@ -8,7 +8,7 @@ RUN apt-get -y install netcat
 
 EXPOSE 8761
 
-ARG ARTIFACT=${jarName:-discovery}-${jarVersion:-1.0-SNAPSHOT}.jar
+ARG ARTIFACT=${jarName:-discovery-service}-${jarVersion:-1.0-SNAPSHOT}.jar
 ARG BOOTSTRAP_FILE=${bootstrapFile:-bootstrap.sh}
 
 ADD build/libs/$ARTIFACT $ARTIFACT

@@ -2,7 +2,7 @@ group 'com.okravtsiv'
 version '1.0-SNAPSHOT'
 
 bootJar {
-    mainClassName = "com.littlejohnny.configserver.ConfigServiceStarter"
+    mainClassName = "com.okravtsiv.configservice.ConfigServiceStarter"
 }
 
 dependencies {

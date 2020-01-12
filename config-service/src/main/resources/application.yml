@@ -1,14 +1,12 @@
 server:
-  port: 8888
+  port: ${CONFIG_PORT:8888}
 
 spring:
   security:
     user:
-      name: configUser
-      password: configPassword
+      name: ${CONFIG_USERNAME:configUser}
+      password: ${CONFIG_PASSWORD:configPassword}
       roles: SYSTEM
-  application:
-    name: configservice
   cloud:
     config:
       server:
@@ -20,7 +18,7 @@ eureka:
     region: default
     registryFetchIntervalSeconds: 5
     serviceUrl:
-      defaultZone: http://discUser:discPassword@${DISCOVERY_HOST:localhost}:${DISCOVERY_PORT:8761}/eureka/
+      defaultZone: http://${DISCOVERY_USERNAME:discUser}:${DISCOVERY_PASSWORD:discPassword}@${DISCOVERY_HOST:localhost}:${DISCOVERY_PORT:8761}/eureka/
 
 management:
   endpoints:
