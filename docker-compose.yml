@@ -10,6 +10,7 @@ services:
         jarName: config-service
         jarVersion: 1.0-SNAPSHOT
         bootstrapFile: bootstrap.sh
+        expose_port: 8888
     image: config-service:latest
     environment:
       - APP_NAME=config-service
@@ -36,6 +37,7 @@ services:
         jarName: discovery-service
         jarVersion: 1.0-SNAPSHOT
         bootstrapFile: bootstrap.sh
+        expose_port: 8761
     image: discovery-service:latest
     environment:
       - APP_NAME=discovery-service
@@ -57,6 +59,39 @@ services:
       true
     depends_on:
       - config-service
+
+  gateway:
+    container_name: gateway
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+      args:
+        jarName: gateway
+        jarVersion: 1.0-SNAPSHOT
+        bootstrapFile: bootstrap.sh
+        expose_port: 8100
+    image: gateway:latest
+    environment:
+      - APP_NAME=gateway
+      - CONFIG_APP_NAME=config-service
+      - CONFIG_FILE_NAME=gateway
+      - CONFIG_HOST=config-service
+      - CONFIG_PORT=8888
+      - CONFIG_USERNAME=configUser
+      - CONFIG_PASSWORD=configPassword
+      - DISCOVERY_HOST=discovery-service
+      - DISCOVERY_PORT=8761
+      - DISCOVERY_USERNAME=discUser
+      - DISCOVERY_PASSWORD=discPassword
+    expose:
+      - 8100
+    networks:
+      - custom_bridge
+    tty:
+      true
+    depends_on:
+      - config-service
+      - discovery-service
 
 networks:
   custom_bridge:

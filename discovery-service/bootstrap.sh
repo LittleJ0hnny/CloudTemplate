@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while ! nc -z $CONFIG_HOST $CONFIG_PORT; do
+while ! nc -z "$CONFIG_HOST" "$CONFIG_PORT"; do
     echo "Waiting for the Config Service"
     sleep 5
 done
