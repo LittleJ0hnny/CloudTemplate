@@ -1,19 +1,20 @@
 spring:
   application:
-    name: authservice
+    name: ${APP_NAME:auth-service}
   cloud:
     config:
-      name: auth-service
+      name: ${CONFIG_FILE_NAME:auth-service}
       discovery:
-        service-id: configservice
+        service-id: ${CONFIG_APP_NAME:config-service}
         enabled: true
-      username: configUser
-      password: configPassword
+      username: ${CONFIG_USERNAME:configUser}
+      password: ${CONFIG_PASSWORD:configPassword}
+      uri: http://${CONFIG_HOST:localhost}:${CONFIG_PORT:8888}
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://discUser:discPassword@${DISCOVERY_HOST:localhost}:${DISCOVERY_PORT:8761}/eureka/
+      defaultZone: http://${DISCOVERY_USERNAME:discUser}:${DISCOVERY_PASSWORD:discPassword}@${DISCOVERY_HOST:localhost}:${DISCOVERY_PORT:8761}/eureka/
 
 jwt:
   certificate:

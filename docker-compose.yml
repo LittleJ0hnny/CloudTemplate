@@ -79,10 +79,14 @@ services:
       - CONFIG_PORT=8888
       - CONFIG_USERNAME=configUser
       - CONFIG_PASSWORD=configPassword
+      - DISCOVERY_APP_NAME=discovery-service
       - DISCOVERY_HOST=discovery-service
       - DISCOVERY_PORT=8761
       - DISCOVERY_USERNAME=discUser
       - DISCOVERY_PASSWORD=discPassword
+      - GATEWAY_PORT=8100
+      - AUTH_HOST=auth-service
+      - AUTH_PORT=8200
     expose:
       - 8100
     networks:
@@ -92,6 +96,65 @@ services:
     depends_on:
       - config-service
       - discovery-service
+
+  auth_db:
+    container_name: auth_db
+    image: mysql/mysql-server:8.0.13
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=cred_db
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
+    expose:
+      - 3306
+    networks:
+      - custom_bridge
+    tty:
+      true
+    depends_on:
+      - config-service
+      - discovery-service
+      - gateway
+
+  auth-service:
+    container_name: auth-service
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+      args:
+        jarName: auth-service
+        jarVersion: 1.0-SNAPSHOT
+        bootstrapFile: bootstrap.sh
+    image: auth-service:latest
+    environment:
+      - APP_NAME=auth-service
+      - AUTH_PORT=8200
+      - CONFIG_APP_NAME=config-service
+      - CONFIG_FILE_NAME=auth-service
+      - CONFIG_HOST=config-service
+      - CONFIG_PORT=8888
+      - CONFIG_USERNAME=configUser
+      - CONFIG_PASSWORD=configPassword
+      - DISCOVERY_HOST=discovery-service
+      - DISCOVERY_PORT=8761
+      - DISCOVERY_USERNAME=discUser
+      - DISCOVERY_PASSWORD=discPassword
+      - MYSQL_HOST=auth_db
+      - MYSQL_PORT=3306
+      - DB_NAME=cred_db
+      - DB_USER=admin
+      - DB_PASSWORD=admin
+    expose:
+      - 8200
+    networks:
+      - custom_bridge
+    tty:
+      true
+    depends_on:
+      - config-service
+      - discovery-service
+      - gateway
+      - auth_db
 
 networks:
   custom_bridge:

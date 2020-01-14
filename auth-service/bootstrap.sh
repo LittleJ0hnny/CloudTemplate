@@ -1,15 +1,20 @@
 #!/bin/bash
 
-while ! nc -z config-service 8888; do
+while ! nc -z "$CONFIG_HOST" "$CONFIG_PORT"; do
     echo "Waiting for the Config Service"
-    sleep 3
+    sleep 5
 done
 
-while ! nc -z discovery-service 8761; do
+while ! nc -z "$DISCOVERY_HOST" "$DISCOVERY_PORT"; do
     echo "Waiting for the Discovery Service"
-    sleep 3
+    sleep 5
 done
 
-sleep 30
+while ! nc -z "$GATEWAY_HOST" "$GATEWAY_PORT"; do
+    echo "Waiting for the Gateway Service"
+    sleep 5
+done
+
+sleep 10
 
 java $JAVA_OPTS -jar $ARTIFACT_FILE
