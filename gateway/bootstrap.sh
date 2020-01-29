@@ -10,6 +10,6 @@ while ! nc -z "$DISCOVERY_HOST" "$DISCOVERY_PORT"; do
     sleep 5
 done
 
-sleep 30
+sleep 40
 
 java $JAVA_OPTS -jar $ARTIFACT_FILE

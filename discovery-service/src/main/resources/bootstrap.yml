@@ -1,9 +1,9 @@
 spring:
   application:
-    name: ${APP_NAME:discovery-service}
+    name: ${DISCOVERY_APP_NAME:discovery-service}
   cloud:
     config:
-      name: ${CONFIG_FILE_NAME:discovery-service}
+      name: ${DISCOVERY_CONFIG_FILE_NAME:discovery-service}
       username: ${CONFIG_USERNAME:configUser}
       password: ${CONFIG_PASSWORD:configPassword}
       uri: http://${CONFIG_HOST:localhost}:${CONFIG_PORT:8888}

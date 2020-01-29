@@ -50,7 +50,7 @@ services:
     tty:
       true
     networks:
-      - custom_bridge
+      - custom_overlay
 
   config-service:
     container_name: config-service
@@ -73,7 +73,7 @@ services:
     tty:
       true
     networks:
-      - custom_bridge
+      - custom_overlay
 
   discovery-service:
     container_name: discovery-service
@@ -98,7 +98,7 @@ services:
     depends_on:
       - config-service
     networks:
-      - custom_bridge
+      - custom_overlay
 
   gateway:
     container_name: gateway
@@ -126,7 +126,7 @@ services:
       - config-service
       - discovery-service
     networks:
-      - custom_bridge
+      - custom_overlay
 
   auth_db:
     container_name: auth_db
@@ -142,7 +142,7 @@ services:
       - discovery-service
       - gateway
     networks:
-      - custom_bridge
+      - custom_overlay
 
   auth-service:
     container_name: auth-service
@@ -173,9 +173,9 @@ services:
       - gateway
       - auth_db
     networks:
-      - custom_bridge
+      - custom_overlay
 
 networks:
-  custom_bridge:
-    name: custom_bridge
-    driver: bridge
+  custom_overlay:
+    name: custom_overlay
+    driver: overlay

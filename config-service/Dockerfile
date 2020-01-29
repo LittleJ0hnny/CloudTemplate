@@ -1,16 +1,27 @@
-FROM openjdk:8u181-jdk
+FROM openjdk:11
 
 MAINTAINER Ostap Kravtsiv
 
-EXPOSE 8888
+RUN apt-get update
+RUN apt-get -y upgrade
+RUN apt-get -y install netcat
+
+ARG jarName
+ARG jarVersion
+ARG bootstrapFile
+ARG logHost
+ARG logPort
 
 ARG ARTIFACT=${jarName:-config-service}-${jarVersion:-1.0-SNAPSHOT}.jar
 ARG BOOTSTRAP_FILE=${bootstrapFile:-bootstrap.sh}
 
-ADD build/libs/$ARTIFACT $ARTIFACT
-ADD $BOOTSTRAP_FILE $BOOTSTRAP_FILE
+ARG LOGSTASH_HOST_OPTION="LOGSTASH_HOST=$logHost"
+ARG LOGSTASH_PORT_OPTION="LOGSTASH_PORT=$logPort"
 
-ENV JAVA_OPTS=""
+ADD build/libs/$ARTIFACT .
+ADD $BOOTSTRAP_FILE .
+
+ENV JAVA_OPTS="-D$LOGSTASH_HOST_OPTION -D$LOGSTASH_PORT_OPTION"
 ENV ARTIFACT_FILE=$ARTIFACT
 ENV BOOTSTRAP_FILE=$BOOTSTRAP_FILE
 
